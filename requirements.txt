@@ -1,0 +1,5 @@
+pandas
+openpyxl
+pillow
+flake8
+flask

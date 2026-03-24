@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+    <h2>{{ title }}</h2>
+    <form method="post" class="form grid">
+        <label>ID (если пусто, сгенерируется)</label>
+        <input name="id" type="number" min="1" value="{{ item['id'] if item else '' }}">
+
+        <label>Артикул товара</label>
+        <input name="article" required value="{{ item['product_article'] if item else '' }}">
+
+        <label>Количество</label>
+        <input name="quantity" type="number" min="1" required value="{{ item['quantity'] if item else '1' }}">
+
+        <label>Статус заказа</label>
+        <input name="order_status" required value="{{ item['order_status'] if item else '' }}">
+
+        <label>Адрес пункта выдачи</label>
+        <input name="pickup_address" required value="{{ item['address_text'] if item else '' }}">
+
+        <label>Дата заказа</label>
+        <input name="order_date" type="date" required value="{{ item['order_date'] if item else '' }}">
+
+        <label>Дата выдачи</label>
+        <input name="delivery_date" type="date" required value="{{ item['delivery_date'] if item else '' }}">
+
+        <label>ФИО клиента</label>
+        <input name="client_name" required value="{{ item['client_name'] if item else '' }}">
+
+        <label>Код получения</label>
+        <input name="receive_code" value="{{ item['receive_code'] if item else '' }}">
+
+        <div class="row">
+            <button type="submit">Сохранить</button>
+            <a class="btn secondary" href="{{ url_for('orders') }}">Назад</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

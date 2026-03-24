@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+    <h2>{{ title }}</h2>
+    <form method="post" class="form grid">
+        <label>Артикул</label>
+        <input name="article" required value="{{ item['article'] if item else '' }}">
+        <label>Наименование</label>
+        <input name="product_name" required value="{{ item['product_name'] if item else '' }}">
+        <label>Категория</label>
+        <input name="category" required value="{{ item['category_name'] if item else '' }}">
+        <label>Описание</label>
+        <input name="description" required value="{{ item['description'] if item else '' }}">
+        <label>Производитель</label>
+        <input name="manufacturer" required value="{{ item['manufacturer_name'] if item else '' }}">
+        <label>Поставщик</label>
+        <input name="supplier" required value="{{ item['supplier_name'] if item else '' }}">
+        <label>Цена</label>
+        <input name="base_price" type="number" step="0.01" min="0" required value="{{ item['base_price'] if item else '' }}">
+        <label>Количество</label>
+        <input name="stock_count" type="number" min="0" required value="{{ item['stock_count'] if item else '' }}">
+        <label>Скидка, %</label>
+        <input name="discount_percent" type="number" min="0" max="100" required value="{{ item['discount_percent'] if item else '0' }}">
+        <div class="row">
+            <button type="submit">Сохранить</button>
+            <a class="btn secondary" href="{{ url_for('products') }}">Назад</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

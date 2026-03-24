@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="row between">
+    <h2>Товары ({{ role }})</h2>
+    <div>Пользователь: {{ full_name }}</div>
+</section>
+
+{% if role in ["manager", "admin"] %}
+<form method="get" class="card form row wrap">
+    <input name="q" placeholder="Поиск..." value="{{ q }}">
+    <select name="supplier">
+        <option>Все поставщики</option>
+        {% for s in suppliers %}
+            <option {% if supplier == s["supplier_name"] %}selected{% endif %}>
+                {{ s["supplier_name"] }}
+            </option>
+        {% endfor %}
+    </select>
+    <select name="sort">
+        <option value="none" {% if stock_sort == "none" %}selected{% endif %}>Без сортировки</option>
+        <option value="asc" {% if stock_sort == "asc" %}selected{% endif %}>Остаток по возрастанию</option>
+        <option value="desc" {% if stock_sort == "desc" %}selected{% endif %}>Остаток по убыванию</option>
+    </select>
+    <button type="submit">Применить</button>
+    {% if role == "admin" %}
+        <a class="btn" href="{{ url_for('product_create') }}">Добавить товар</a>
+    {% endif %}
+</form>
+{% endif %}
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Фото</th>
+                <th>Артикул</th>
+                <th>Наименование</th>
+                <th>Категория</th>
+                <th>Описание</th>
+                <th>Производитель</th>
+                <th>Поставщик</th>
+                <th>Цена</th>
+                <th>Скидка %</th>
+                <th>Итоговая цена</th>
+                <th>Остаток</th>
+                {% if role == "admin" %}<th>Действия</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in products %}
+            {% set final_price = p["base_price"] * (1 - p["discount_percent"] / 100) %}
+            <tr class="{% if p['stock_count'] == 0 %}out-stock{% elif p['discount_percent'] > 15 %}high-discount{% endif %}">
+                <td>
+                    <img class="product-image" src="{{ url_for('assets', filename=p['image_file']) }}" alt="Фото">
+                </td>
+                <td>{{ p["article"] }}</td>
+                <td>{{ p["product_name"] }}</td>
+                <td>{{ p["category_name"] }}</td>
+                <td>{{ p["description"] }}</td>
+                <td>{{ p["manufacturer_name"] }}</td>
+                <td>{{ p["supplier_name"] }}</td>
+                <td {% if p["discount_percent"] > 0 %}class="old-price"{% endif %}>
+                    {{ "%.2f"|format(p["base_price"]) }}
+                </td>
+                <td>{{ p["discount_percent"] }}</td>
+                <td>{{ "%.2f"|format(final_price) }}</td>
+                <td>{{ p["stock_count"] }}</td>
+                {% if role == "admin" %}
+                <td>
+                    <a class="btn" href="{{ url_for('product_edit', article=p['article']) }}">Изменить</a>
+                    <form method="post" action="{{ url_for('product_delete', article=p['article']) }}" class="inline">
+                        <button class="danger" type="submit">Удалить</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

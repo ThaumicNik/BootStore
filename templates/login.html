@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card narrow">
+    <div class="logo-wrap">
+        <img class="brand-logo" src="{{ url_for('assets', filename='Icon.png') }}" alt="Логотип">
+    </div>
+    <h2>Авторизация</h2>
+    <form method="post" class="form">
+        <label>Email</label>
+        <input type="email" name="email" required>
+        <label>Пароль</label>
+        <input type="password" name="password" required>
+        <button type="submit">Войти</button>
+    </form>
+    <form method="post">
+        <input type="hidden" name="guest" value="1">
+        <button type="submit" class="secondary">Войти как гость</button>
+    </form>
+</section>
+{% endblock %}
